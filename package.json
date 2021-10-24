@@ -1,0 +1,27 @@
+{
+  "name": "crypto-trader",
+  "version": "0.0.1-alpha",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsc"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Hhanuska/crypto-trader.git"
+  },
+  "author": "Hhanuska",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Hhanuska/crypto-trader/issues"
+  },
+  "homepage": "https://github.com/Hhanuska/crypto-trader#readme",
+  "devDependencies": {
+    "@types/node": "^16.11.4",
+    "typescript": "^4.4.4"
+  },
+  "dependencies": {
+    "axios": "^0.23.0"
+  }
+}
