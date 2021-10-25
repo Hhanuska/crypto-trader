@@ -15,8 +15,5 @@
     constructor(key: string, secret: string) {
         this.key = key;
         this.secret = secret;
-
-        // this.Wallet = new Wallet(this.key, this.secret);
-        // this.Market = new Market(this.key, this.secret);
     }
 }
