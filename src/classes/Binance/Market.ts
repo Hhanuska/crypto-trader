@@ -16,21 +16,21 @@ export default class Market {
         this.api = api;
     }
 
-    async candleStickData(marketDataOptions: MarketDataOptions) {
+    async candleStickData(params: MarketDataOptions) {
         const response = await this.api.request({
             method: 'get',
             url: '/api/v3/klines',
             params: {
-                symbol: marketDataOptions.symbol,
-                interval: marketDataOptions.interval,
-                startTime: marketDataOptions.startTime,
-                endTime: marketDataOptions.endTime,
-                limit: marketDataOptions.limit
+                symbol: params.symbol,
+                interval: params.interval,
+                startTime: params.startTime,
+                endTime: params.endTime,
+                limit: params.limit
             }
         });
 
         if (response.status !== 200) {
-            return response.statusText;
+            throw new Error(response.statusText);
         }
 
         return response.data;
