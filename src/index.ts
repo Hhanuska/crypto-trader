@@ -2,8 +2,6 @@ import API from './classes/Binance/Api';
 import Market from './classes/Binance/Market';
 import { config } from './resources/config';
 
-require('./server/index');
-
 const api = new API(config.Binance.key, config.Binance.secret);
 const market = new Market(api);
 
