@@ -14,10 +14,7 @@ export default class API {
 
         this.api = axios.create({
             baseURL: 'https://api.binance.com',
-            timeout: 5000,
-            headers: {
-                'X-MBX-APIKEY': key
-            }
+            timeout: 5000
         });
     }
 
