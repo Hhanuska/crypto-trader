@@ -10,10 +10,9 @@ const market = new Market(api);
 test()
 
 export async function test() {
-    console.log(await market.candleStickData({
+    console.log('Last 10 1d candles of BTC/USDT pair:', await market.candleStickData({
         symbol: 'BTCUSDT',
         interval: '1d',
         limit: 10
     }))
 }
-
