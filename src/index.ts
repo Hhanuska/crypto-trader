@@ -9,7 +9,7 @@ const market = new Market(api);
 
 test()
 
-async function test() {
+export async function test() {
     console.log(await market.candleStickData({
         symbol: 'BTCUSDT',
         interval: '1d',
