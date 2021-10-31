@@ -16,3 +16,11 @@ export async function test() {
         limit: 10
     }))
 }
+
+export async function test2(symbol: string, interval: string, limit: number) {
+    console.log('Last 10 1d candles of BTC/USDT pair:', await market.candleStickData({
+        symbol: 'BTCUSDT',
+        interval: '1d',
+        limit: 10
+    }))
+}
