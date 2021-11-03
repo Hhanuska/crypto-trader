@@ -11,7 +11,8 @@ const Downloader: NextPage = () => {
             body: JSON.stringify({
                 symbol: event.target.symbol.value,
                 from: event.target.from.value,
-                to: event.target.to.value
+                to: event.target.to.value,
+                resolution: event.target.resolution.value
             })
         });
     }
