@@ -1,27 +1,23 @@
 {
   "name": "crypto-trader",
-  "version": "0.0.1-alpha",
-  "description": "",
-  "main": "index.js",
+  "private": true,
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "tsc"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/Hhanuska/crypto-trader.git"
-  },
-  "author": "Hhanuska",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/Hhanuska/crypto-trader/issues"
-  },
-  "homepage": "https://github.com/Hhanuska/crypto-trader#readme",
-  "devDependencies": {
-    "@types/node": "^16.11.4",
-    "typescript": "^4.4.4"
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
   },
   "dependencies": {
-    "axios": "^0.23.0"
+    "axios": "^0.24.0",
+    "next": "12.0.2",
+    "react": "17.0.2",
+    "react-dom": "17.0.2"
+  },
+  "devDependencies": {
+    "@types/node": "16.11.6",
+    "@types/react": "17.0.33",
+    "eslint": "7.32.0",
+    "eslint-config-next": "12.0.2",
+    "typescript": "4.4.4"
   }
 }
