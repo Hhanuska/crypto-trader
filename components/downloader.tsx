@@ -22,12 +22,42 @@ const Downloader: NextPage = () => {
             <form onSubmit={onSubmit}>
                 <label htmlFor="symbol">Symbol</label>
                 <input type="text" id="symbol" defaultValue="BTCUSDT" required />
+
                 <label htmlFor="from">From</label>
                 <input type="date" id="from" required />
+
                 <label htmlFor="to">To</label>
                 <input type="date" id="to" required />
+
                 <label htmlFor="resolution">Resolution</label>
-                <input type="text" id="resolution" defaultValue="1d" />
+                <select name="resolution" id="resolution">
+                    <optgroup label="Minutes">
+                        <option value="1m">1m</option>
+                        <option value="3m">3m</option>
+                        <option value="5m">5m</option>
+                        <option value="15m">15m</option>
+                        <option value="30m">30m</option>
+                    </optgroup>
+                    <optgroup label="Hours">
+                        <option value="1h">1h</option>
+                        <option value="2h">2h</option>
+                        <option value="4h">4h</option>
+                        <option value="6h">6h</option>
+                        <option value="8h">8h</option>
+                        <option value="12h">12h</option>
+                    </optgroup>
+                    <optgroup label="Days">
+                        <option value="1d" selected={true}>1d</option>
+                        <option value="3d">3d</option>
+                    </optgroup>
+                    <optgroup label="Weeks">
+                        <option value="1w">1w</option>
+                    </optgroup>
+                    <optgroup label="Months">
+                        <option value="1M">1M</option>
+                    </optgroup>
+                </select>
+                
                 <input type="submit" value="Download" />
             </form>
         </div>

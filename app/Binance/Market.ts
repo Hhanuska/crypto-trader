@@ -1,6 +1,6 @@
 import API from "./Api";
 
-interface MarketDataOptions {
+export interface MarketDataOptions {
     symbol: string;
     interval: string;
     startTime?: number;
@@ -16,16 +16,31 @@ export default class Market {
         this.api = api;
     }
 
-    async candleStickData(params: MarketDataOptions) {
+    async testConnectivity() {
+        try {
+            await this.api.request({
+                method: 'GET',
+                url: '/api/v3/ping'
+            });
+
+            return true;
+        } catch (err) {
+            console.error(err);
+
+            return false;
+        }
+    }
+
+    async candleStickData(parameters: MarketDataOptions) {
         const response = await this.api.request({
-            method: 'get',
+            method: 'GET',
             url: '/api/v3/klines',
             params: {
-                symbol: params.symbol,
-                interval: params.interval,
-                startTime: params.startTime,
-                endTime: params.endTime,
-                limit: params.limit
+                symbol: parameters.symbol,
+                interval: parameters.interval,
+                startTime: parameters.startTime,
+                endTime: parameters.endTime,
+                limit: parameters.limit
             }
         });
 
