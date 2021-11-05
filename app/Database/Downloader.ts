@@ -1,6 +1,7 @@
 import Database from "./Database";
 import { InputParsed } from "../../pages/api/marketData";
-import Binance from "../Binance/Binance";
+import Binance from "../binance/Binance";
+import { arrayToCandlestick } from "../binance/data/candlestick";
 
 export default class Downloader {
 
@@ -23,11 +24,11 @@ export default class Downloader {
             return;
         }
 
-        this.downloadInProgress = true;
+        if (this.downloadInProgress && initialCall) {
+            return;
+        }
 
-        // if (initialCall) {
-        //     Database.createTableFromParams();
-        // }
+        this.downloadInProgress = true;
 
         const limit = this.calculateAmount(params);
 
@@ -39,11 +40,21 @@ export default class Downloader {
             limit: 1000
         });
 
-        // TODO: Save to database...
-        console.log(marketData.length);
+        const tableName = Database.tableNameFromParams(params);
+
+        if (initialCall) {
+            await Database.dropTable(tableName);    // For development only
+            await Database.createTableForCandles(tableName);
+        }
+        
+        marketData.forEach((e: Array<number | string>) => {
+            Database.addCandleToTable(tableName, arrayToCandlestick(e), params);
+        });
 
         if (limit > 1000) {
-            // TODO: Avoid ratelimit
+            // TODO: Make sure to avoid ratelimit
+            // Limit is 1200 / minute => 20 / sec => 1 request / 50 ms
+            // (Request + write to db will almost always take longer than 50ms, unlikely to ever get rate limited)
             this.downloadData({
                 symbol: params.symbol,
                 resolution: params.resolution,
