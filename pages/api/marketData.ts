@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-import Downloader from '../../app/Downloader/Downloader';
+import Downloader from '../../app/Database/Downloader';
 
 interface Response {
     success: boolean;

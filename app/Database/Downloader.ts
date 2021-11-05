@@ -1,7 +1,6 @@
+import Database from "./Database";
 import { InputParsed } from "../../pages/api/marketData";
-import API from "../Binance/Api";
 import Binance from "../Binance/Binance";
-import Market, { MarketDataOptions } from "../Binance/Market";
 
 export default class Downloader {
 
@@ -13,9 +12,23 @@ export default class Downloader {
 
     private constructor(binance: Binance) {
         this.binance = binance;
+
+        Database.initialize();
     }
 
-    async downloadData(params: InputParsed): Promise<void> {
+    async downloadData(params: InputParsed, initialCall = true): Promise<void> {
+        // Shouldn't be possible
+        if (!Database.isReady()) {
+            Database.initialize();
+            return;
+        }
+
+        this.downloadInProgress = true;
+
+        // if (initialCall) {
+        //     Database.createTableFromParams();
+        // }
+
         const limit = this.calculateAmount(params);
 
         const marketData = await this.binance.market.candleStickData({
@@ -31,12 +44,14 @@ export default class Downloader {
 
         if (limit > 1000) {
             // TODO: Avoid ratelimit
-            await this.downloadData({
+            this.downloadData({
                 symbol: params.symbol,
                 resolution: params.resolution,
                 from: marketData[marketData.length - 1][6],
                 to: params.to
-            });
+            }, false);
+        } else {
+            this.downloadInProgress = false;
         }
     }
 
