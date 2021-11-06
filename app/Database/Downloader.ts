@@ -13,14 +13,12 @@ export default class Downloader {
 
     private constructor(binance: Binance) {
         this.binance = binance;
-
-        Database.initialize();
     }
 
     async downloadData(params: InputParsed, initialCall = true): Promise<void> {
         // Shouldn't be possible
-        if (!Database.isReady()) {
-            Database.initialize();
+        if (!Database.instance.isReady()) {
+            console.error('Database not ready');
             return;
         }
 
@@ -43,12 +41,12 @@ export default class Downloader {
         const tableName = Database.tableNameFromParams(params);
 
         if (initialCall) {
-            await Database.dropTable(tableName);    // For development only
-            await Database.createTableForCandles(tableName);
+            await Database.instance.dropTable(tableName);    // For development only
+            await Database.instance.createTableForCandles(tableName);
         }
         
         marketData.forEach((e: Array<number | string>) => {
-            Database.addCandleToTable(tableName, arrayToCandlestick(e), params);
+            Database.instance.addCandleToTable(tableName, arrayToCandlestick(e), params);
         });
 
         if (limit > 1000) {

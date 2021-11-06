@@ -7,37 +7,36 @@ sqlite3.verbose();
 
 export default class Database {
 
-    public static instance: sqlite3.Database;
+    public static instance: Database = new Database();
 
-    private static ready: boolean = false;
+    private ready: boolean = false;
 
-    public static isReady(): boolean {
-        return Database.ready;
+    private db: sqlite3.Database;
+
+    private constructor() {
+        this.db = new sqlite3.Database('files/db');
+
+        this.db.on('open', this.onOpen.bind(this));
+        this.db.on('close', this.onClose.bind(this));
     }
 
-    public static async initialize(): Promise<void> {
-        if (Database.ready) {
-            return;
-        }
-
-        Database.instance = new sqlite3.Database('files/db');
-        Database.instance.on('open', Database.onOpen);
-        Database.instance.on('close', Database.onClose);
+    public isReady(): boolean {
+        return this.ready;
     }
 
-    private static onOpen() {
-        Database.ready = true;
+    private onOpen() {
+        this.ready = true;
     }
 
-    private static onClose() {
-        Database.ready = false;
+    private onClose() {
+        this.ready = false;
     }
 
     public static tableNameFromParams(params: InputParsed): string {
         return `${params.symbol}_${params.resolution}_${params.from}_${params.to}`;
     }
 
-    public static async createTableForCandles(tableName: string): Promise<void> {
+    public async createTableForCandles(tableName: string): Promise<void> {
         // TODO: Check if table already exists
         const sql = `CREATE TABLE IF NOT EXISTS ${tableName} (
             id TEXT UNIQUE PRIMARY KEY NOT NULL,
@@ -55,7 +54,7 @@ export default class Database {
         );`
 
         return new Promise((resolve, reject) => {
-            Database.instance.run(sql, (err) => {
+            this.db.run(sql, (err) => {
                 if (err) {
                     return reject(err);
                 }
@@ -69,8 +68,8 @@ export default class Database {
         return `${params.symbol}_${params.resolution}_${candle.time.open}`
     }
 
-    public static async addCandleToTable(tableName: string, candle: Candlestick, params: InputParsed): Promise<void> {
-        const statement = Database.instance.prepare(
+    public async addCandleToTable(tableName: string, candle: Candlestick, params: InputParsed): Promise<void> {
+        const statement = this.db.prepare(
             `INSERT INTO ${tableName}
             (id, openTime, closeTime, open, close, high, low, volume, quoteAV, trades, buyBaseAV, buyQuoteAV)
             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
@@ -92,15 +91,32 @@ export default class Database {
         statement.finalize();
     }
 
-    public static async dropTable(tableName: string): Promise<void> {
+    public async dropTable(tableName: string): Promise<void> {
         return new Promise((resolve, reject) => {
-            Database.instance.run(`DROP TABLE IF EXISTS ${tableName}`, (err) => {
+            this.db.run(`DROP TABLE IF EXISTS ${tableName}`, (err) => {
                 if (err) {
                     return reject(err);
                 }
 
                 return resolve();
-            })
+            });
+        });
+    }
+
+    public async getTables(): Promise<Array<any>> {
+        const sql = `
+            SELECT name FROM sqlite_schema
+            WHERE type = 'table' AND name not LIKE 'sqlite_%';
+        `;
+        
+        return new Promise((resolve, reject) => {
+            this.db.all(sql, (err, rows) => {
+                if (err) {
+                    return reject(err);
+                }
+                
+                resolve(rows);
+            });
         });
     }
 }
