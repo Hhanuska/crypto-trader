@@ -46,7 +46,14 @@ export default async function handler(
     response.status(isBinanceUp ? 200 : 500).json({ success: isBinanceUp });
 
     console.log('Got request', params);
-    Downloader.instance.downloadData(params);
+    const limit = await Downloader.instance.downloadData(params);
+
+    if (typeof limit === 'number') {
+        const requiredRequests = Math.ceil(limit / 1000);
+        console.log(requiredRequests);
+    } else {
+        throw new Error('Failed to download market data');
+    }
 }
 
 function parseInput(input: Input): InputParsed {

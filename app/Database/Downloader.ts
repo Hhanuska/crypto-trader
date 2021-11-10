@@ -15,7 +15,7 @@ export default class Downloader {
         this.binance = binance;
     }
 
-    async downloadData(params: InputParsed, initialCall = true): Promise<void> {
+    async downloadData(params: InputParsed, initialCall: boolean = true, tableName: string | null = null): Promise<Number | void> {
         // Shouldn't be possible
         if (!Database.instance.isReady()) {
             console.error('Database not ready');
@@ -38,15 +38,14 @@ export default class Downloader {
             limit: 1000
         });
 
-        const tableName = Database.tableNameFromParams(params);
-
         if (initialCall) {
-            await Database.instance.dropTable(tableName);    // For development only
-            await Database.instance.createTableForCandles(tableName);
+            tableName = Database.tableNameFromParams(params);
+
+            await Database.instance.createTableForCandles(tableName as string);
         }
         
         marketData.forEach((e: Array<number | string>) => {
-            Database.instance.addCandleToTable(tableName, arrayToCandlestick(e), params);
+            Database.instance.addCandleToTable(tableName as string, arrayToCandlestick(e), params);
         });
 
         if (limit > 1000) {
@@ -58,10 +57,12 @@ export default class Downloader {
                 resolution: params.resolution,
                 from: marketData[marketData.length - 1][6],
                 to: params.to
-            }, false);
+            }, false, tableName);
         } else {
             this.downloadInProgress = false;
         }
+
+        return limit;
     }
 
     private calculateAmount(params: InputParsed): number {
