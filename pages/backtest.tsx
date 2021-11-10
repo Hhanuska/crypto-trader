@@ -1,5 +1,7 @@
 import type { GetServerSideProps, GetServerSidePropsContext, InferGetServerSidePropsType, NextPage } from 'next';
 import { BaseSyntheticEvent } from 'react';
+import NavBar from '../components/navbar';
+
 import Database from '../app/database/Database';
 import Table from '../app/database/Table';
 
@@ -31,6 +33,7 @@ const dropTable = async (event: BaseSyntheticEvent) => {
 
 const BacktestPage: NextPage = ({ tables }: InferGetServerSidePropsType<typeof getServerSideProps>) => (
     <div>
+        <NavBar />
         <table>
             <tr>
                 <th>Symbol</th>

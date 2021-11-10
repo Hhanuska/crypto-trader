@@ -1,5 +1,7 @@
 import type { GetStaticProps, GetStaticPropsContext, InferGetStaticPropsType, NextPage } from 'next';
 import { BaseSyntheticEvent, useState } from 'react';
+import NavBar from '../components/navbar';
+
 import { timeout } from '../app/resources/utils';
 import EResolution from '../app/resources/EResolution';
 
@@ -57,6 +59,7 @@ const DownloadPage: NextPage = ({ resolutions }: InferGetStaticPropsType<typeof 
 
     return (
         <div>
+            <NavBar />
             <form onSubmit={onSubmit}>
                 <label htmlFor="symbol">Symbol</label>
                 <input type="text" id="symbol" defaultValue="BTCUSDT" required />
