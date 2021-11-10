@@ -49,7 +49,7 @@ const BacktestPage: NextPage = ({ tables }: InferGetServerSidePropsType<typeof g
                         <td>{parsed.from}</td>
                         <td>{parsed.to}</td>
                         <td>
-                            <button value={name} onClick={dropTable}>Delete</button>
+                            <button value={name} onClick={dropTable}>🗑 Delete</button>
                         </td>
                     </tr>
                 );
