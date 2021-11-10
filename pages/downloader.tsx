@@ -13,7 +13,7 @@ export const getStaticProps: GetStaticProps = (context: GetStaticPropsContext) =
     }
 }
 
-const Downloader: NextPage = ({ resolutions }: InferGetStaticPropsType<typeof getStaticProps>) => {
+const DownloadPage: NextPage = ({ resolutions }: InferGetStaticPropsType<typeof getStaticProps>) => {
     const [downloadProgress, setDownloadProgress] = useState({ inProgress: false, required: 0, current: 0 });
 
     const onSubmit = async (event: BaseSyntheticEvent) => {
@@ -69,44 +69,19 @@ const Downloader: NextPage = ({ resolutions }: InferGetStaticPropsType<typeof ge
 
                 <label htmlFor="resolution">Resolution</label>
                 <select name="resolution" id="resolution">
-                    {/* {
-                        resolutions.map((label: string) => {
+                    {
+                        Object.keys(resolutions).map((label: string) => {
                             return (
                                 <optgroup label={label}>
                                     {resolutions[label].map((EResolution: string) => {
                                         return (
-                                            <option value={EResolution}>{EResolution}</option>
+                                            <option value={EResolution} selected={EResolution === '1d'}>{EResolution}</option>
                                         )
                                     })}
                                 </optgroup>
                             )
                         })
-                    } */}
-                    <optgroup label="Minutes">
-                        <option value="1m">1m</option>
-                        <option value="3m">3m</option>
-                        <option value="5m">5m</option>
-                        <option value="15m">15m</option>
-                        <option value="30m">30m</option>
-                    </optgroup>
-                    <optgroup label="Hours">
-                        <option value="1h">1h</option>
-                        <option value="2h">2h</option>
-                        <option value="4h">4h</option>
-                        <option value="6h">6h</option>
-                        <option value="8h">8h</option>
-                        <option value="12h">12h</option>
-                    </optgroup>
-                    <optgroup label="Days">
-                        <option value="1d" selected={true}>1d</option>
-                        <option value="3d">3d</option>
-                    </optgroup>
-                    <optgroup label="Weeks">
-                        <option value="1w">1w</option>
-                    </optgroup>
-                    <optgroup label="Months">
-                        <option value="1M">1M</option>
-                    </optgroup>
+                    }
                 </select>
                 
                 <input type="submit" value="Download" />
@@ -121,4 +96,4 @@ const Downloader: NextPage = ({ resolutions }: InferGetStaticPropsType<typeof ge
     );
 }
 
-export default Downloader;
+export default DownloadPage;

@@ -4,7 +4,7 @@ import Link from 'next/link';
 
 const Home: NextPage = () => (
 	<div>
-		<Link href='/data'>
+		<Link href='/downloader'>
 			<a>Download Data</a>
 		</Link>
 		<Link href='/backtest'>
