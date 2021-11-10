@@ -1,11 +1,10 @@
 import type { GetServerSideProps, GetServerSidePropsContext, InferGetServerSidePropsType, NextPage } from 'next';
 import { BaseSyntheticEvent } from 'react';
+import Database from '../app/database/Database';
 import Table from '../app/database/Table';
 
 export const getServerSideProps: GetServerSideProps = async (context: GetServerSidePropsContext) => {
-    const response = await fetch('http://localhost:3000/api/getTables');
-    const json = await response.json();
-    const tables = json.success ? json.tables : [];
+    const tables = (await Database.instance.getTables()).map((t) => t.name);
     
     return {
         props: {
