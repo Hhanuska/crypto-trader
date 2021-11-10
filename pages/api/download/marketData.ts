@@ -1,13 +1,12 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-import Downloader from '../../app/database/Downloader';
+import Downloader from '../../../app/database/Downloader';
 
-interface Response {
+export interface Response {
     success: boolean;
 }
 
 interface ErrorResponse {
     success: boolean;
-    errorCode: number;
     reason: string;
 }
 
@@ -26,13 +25,12 @@ export interface InputParsed {
 
 export default async function handler(
     request: NextApiRequest,
-    response: NextApiResponse<Response | ErrorResponse>
+    response: NextApiResponse
 ) {
     if (request.method !== 'POST') {
         const errorCode = 405;
         const res = {
             success: false,
-            errorCode: errorCode,
             reason: 'Invalid method'
         };
 
@@ -41,19 +39,13 @@ export default async function handler(
 
     const params = parseInput(JSON.parse(request.body) as Input);
 
-    const isBinanceUp = await (Downloader.instance.binance.market.testConnectivity())
-
-    response.status(isBinanceUp ? 200 : 500).json({ success: isBinanceUp });
+    const isBinanceUp = await (Downloader.instance.binance.market.testConnectivity());
+    const ready = isBinanceUp && !Downloader.instance.getProgress().inProgress;
 
     console.log('Got request', params);
-    const limit = await Downloader.instance.downloadData(params);
+    await Downloader.instance.downloadData(params);
 
-    if (typeof limit === 'number') {
-        const requiredRequests = Math.ceil(limit / 1000);
-        console.log(requiredRequests);
-    } else {
-        throw new Error('Failed to download market data');
-    }
+    response.status(ready ? 200 : 500).json({ success: ready });
 }
 
 function parseInput(input: Input): InputParsed {

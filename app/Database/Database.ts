@@ -1,6 +1,6 @@
 import sqlite3 from 'sqlite3';
 import { promisify } from 'util';
-import { InputParsed } from '../../pages/api/marketData';
+import { InputParsed } from '../../pages/api/download/marketData';
 import { Candlestick } from '../binance/data/candlestick';
 
 sqlite3.verbose();
