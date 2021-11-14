@@ -119,4 +119,19 @@ export default class Database {
             });
         });
     }
+
+    public async getCandles(tableName: string): Promise<Array<any>> {
+        const statement =
+            `SELECT * FROM ${tableName}`;
+
+        return new Promise((resolve, reject) => {
+            this.db.all(statement, (err, rows) => {
+                if (err) {
+                    reject(err);
+                }
+
+                resolve(rows);
+            });
+        });
+    }
 }
