@@ -1,0 +1,22 @@
+:root {
+	--navbarBg: #fae5df;
+	--navbarHg: #303179;
+}
+
+html, body {
+	margin: auto;
+	font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
+		Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+}
+
+a {
+	text-decoration: none;
+}
+
+input, select {
+	display: block;
+}
+
+* {
+	box-sizing: border-box;
+}

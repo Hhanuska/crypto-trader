@@ -1,0 +1,28 @@
+.navbar ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    background-color: var(--navbarBg);
+    overflow: hidden;
+}
+
+.navbar li {
+    float: left;
+}
+
+.navbar > ul > li > a {
+    display: block;
+    color: var(--navbarHg);
+    text-align: center;
+    padding: 25px;
+}
+
+.navbar > ul > li:hover > a {
+    background-color: var(--navbarHg);
+    color: var(--navbarBg);
+}
+
+.navbar > ul > li > a.active {
+    background-color: var(--navbarHg);
+    color: var(--navbarBg);
+}
