@@ -1,8 +1,6 @@
 export interface Candlestick {
-    time: {
-        open: number;
-        close: number;
-    }
+    openTime: number;
+    closeTime: number;
     open: number;
     close: number;
     high: number;
@@ -16,10 +14,8 @@ export interface Candlestick {
 
 export function arrayToCandlestick(arr: Array<number | string>): Candlestick {
     return {
-        time: {
-            open: arr[0] as number,
-            close: arr[6] as number
-        },
+        openTime: arr[0] as number,
+        closeTime: arr[6] as number,
         open: Number(arr[1]),
         close: Number(arr[4]),
         high: Number(arr[2]),

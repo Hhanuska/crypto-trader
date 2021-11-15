@@ -65,7 +65,7 @@ export default class Database {
     }
 
     private static generateCandleId(params: InputParsed, candle: Candlestick): string {
-        return `${params.symbol}_${params.resolution}_${candle.time.open}`
+        return `${params.symbol}_${params.resolution}_${candle.openTime}`
     }
 
     public async addCandleToTable(tableName: string, candle: Candlestick, params: InputParsed): Promise<void> {
@@ -76,8 +76,8 @@ export default class Database {
         );
         statement.run(
             Database.generateCandleId(params, candle),
-            candle.time.open,
-            candle.time.close,
+            candle.openTime,
+            candle.closeTime,
             candle.open,
             candle.close,
             candle.high,
