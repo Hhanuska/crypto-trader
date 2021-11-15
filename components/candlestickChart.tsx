@@ -17,7 +17,7 @@ const CandlestickChart = ({ data, title }: InputProps) => {
             text: title,
         },
         xaxis: {
-            type: 'datetime',
+            type: 'datetime'
         },
         yaxis: {
             tooltip: {
