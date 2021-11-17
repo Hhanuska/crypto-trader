@@ -8,6 +8,8 @@ import Database from '../app/database/Database';
 import Table from '../app/database/Table';
 import { Candlestick } from '../app/binance/data/candlestick';
 
+import styles from '../styles/backtest.module.css';
+
 export const getServerSideProps: GetServerSideProps = async (context: GetServerSidePropsContext) => {
     const tables = (await Database.instance.getTables()).map((t) => t.name);
     
@@ -57,7 +59,7 @@ const BacktestPage: NextPage = ({ tables }: InferGetServerSidePropsType<typeof g
     return (
         <div>
             <NavBar />
-            <table>
+            <table className={styles.table}>
                 <tr>
                     <th>Symbol</th>
                     <th>Resolution</th>
@@ -86,7 +88,7 @@ const BacktestPage: NextPage = ({ tables }: InferGetServerSidePropsType<typeof g
                 })
             }
             </table>
-            <div className='container'>
+            <div className={styles.chart}>
                 <CandlestickChart
                     data={candlestickData.data}
                     title={candlestickData.title}

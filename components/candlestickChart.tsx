@@ -45,7 +45,7 @@ const CandlestickChart = ({ data, title }: InputProps) => {
             series={series}
             type="candlestick"
             height="400px"
-            width="70%"
+            width="100%"
         />
     )
 }
