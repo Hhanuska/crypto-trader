@@ -1,0 +1,14 @@
+.downloader {
+    margin: 5em auto;
+    left: 50%;
+}
+
+.form {
+    display: flex;
+}
+
+.form input {
+    display: block;
+    padding: 1em;
+    border: thin gray solid;
+}

@@ -12,9 +12,12 @@
 
 .navbar > ul > li > a {
     display: block;
-    color: var(--navbarHg);
     text-align: center;
     padding: 25px;
+}
+
+.navbar > ul > li > a:not(.active) {
+    color: var(--navbarHg);
 }
 
 .navbar > ul > li:hover > a {
@@ -22,7 +25,7 @@
     color: var(--navbarBg);
 }
 
-.navbar > ul > li > a.active {
+.active {
     background-color: var(--navbarHg);
     color: var(--navbarBg);
 }

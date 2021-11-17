@@ -30,7 +30,7 @@ const NavBar: NextPage = () => {
 }
 
 const isActiveClass = (router: string, href: string): string => {
-    return router === href ? 'active' : '';
+    return router === href ? styles.active : '';
 }
 
 export default NavBar;

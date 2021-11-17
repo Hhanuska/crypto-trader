@@ -13,10 +13,6 @@ a {
 	text-decoration: none;
 }
 
-input, select {
-	display: block;
-}
-
 * {
 	box-sizing: border-box;
 }

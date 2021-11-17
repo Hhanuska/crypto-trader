@@ -1,9 +1,12 @@
 import type { GetStaticProps, GetStaticPropsContext, InferGetStaticPropsType, NextPage } from 'next';
+import Head from 'next/head';
 import { BaseSyntheticEvent, useState } from 'react';
 import NavBar from '../components/navbar';
 
 import { timeout } from '../app/resources/utils';
 import EResolution from '../app/resources/EResolution';
+
+import styles from '../styles/downloader.module.css'
 
 export const getStaticProps: GetStaticProps = (context: GetStaticPropsContext) => {
     const resolutions = EResolution;
@@ -59,36 +62,39 @@ const DownloadPage: NextPage = ({ resolutions }: InferGetStaticPropsType<typeof 
 
     return (
         <div>
+            <Head>
+                <title>Downloader</title>
+                <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+            </Head>
             <NavBar />
-            <form onSubmit={onSubmit}>
-                <label htmlFor="symbol">Symbol</label>
-                <input type="text" id="symbol" defaultValue="BTCUSDT" required />
-
-                <label htmlFor="from">From</label>
-                <input type="date" id="from" required />
-
-                <label htmlFor="to">To</label>
-                <input type="date" id="to" required />
-
-                <label htmlFor="resolution">Resolution</label>
-                <select name="resolution" id="resolution">
-                    {
-                        Object.keys(resolutions).map((label: string) => {
-                            return (
-                                <optgroup label={label}>
-                                    {resolutions[label].map((EResolution: string) => {
-                                        return (
-                                            <option value={EResolution} selected={EResolution === '1d'}>{EResolution}</option>
-                                        )
-                                    })}
-                                </optgroup>
-                            )
-                        })
-                    }
-                </select>
+            <div className={styles.form}>
+                <form className={styles.downloader} onSubmit={onSubmit}>
+                    <label htmlFor="symbol">Symbol</label>
+                    <input type="text" id="symbol" defaultValue="BTCUSDT" required />
+                    <label htmlFor="from">From</label>
+                    <input type="date" id="from" required />
+                    <label htmlFor="to">To</label>
+                    <input type="date" id="to" required />
+                    <label htmlFor="resolution">Resolution</label>
+                    <select name="resolution" id="resolution">
+                        {
+                            Object.keys(resolutions).map((label: string) => {
+                                return (
+                                    <optgroup label={label}>
+                                        {resolutions[label].map((EResolution: string) => {
+                                            return (
+                                                <option key={EResolution} value={EResolution} selected={EResolution === '1d'}>{EResolution}</option>
+                                            )
+                                        })}
+                                    </optgroup>
+                                )
+                            })
+                        }
+                    </select>
                 
-                <input type="submit" value="Download" />
-            </form>
+                    <input type="submit" value="Download" />
+                </form>
+            </div>
             <div>
                 {downloadProgress.inProgress
                     ? `Download in progress... ${downloadProgress.current} / ${downloadProgress.required}`
