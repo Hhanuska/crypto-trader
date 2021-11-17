@@ -24,6 +24,13 @@ const CandlestickChart = ({ data, title }: InputProps) => {
                 enabled: true
             }
         },
+        chart: {
+            zoom: {
+                enabled: true,
+                autoScaleYaxis: true,
+                type: 'xy'
+            }
+        }
     }
 
     const series = [
