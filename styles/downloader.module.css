@@ -1,14 +1,16 @@
 .downloader {
     margin: 5em auto;
-    left: 50%;
-}
-
-.form {
-    display: flex;
+    display: block;
+    width: fit-content;
 }
 
 .form input {
     display: block;
     padding: 1em;
     border: thin gray solid;
+}
+
+.progress {
+    display: block;
+    text-align: center;
 }

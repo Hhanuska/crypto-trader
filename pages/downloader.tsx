@@ -95,12 +95,12 @@ const DownloadPage: NextPage = ({ resolutions }: InferGetStaticPropsType<typeof 
                     <input type="submit" value="Download" />
                 </form>
             </div>
-            <div>
+            <p className={styles.progress}>
                 {downloadProgress.inProgress
                     ? `Download in progress... ${downloadProgress.current} / ${downloadProgress.required}`
                     : ''
                 }
-            </div>
+            </p>
         </div>
     );
 }

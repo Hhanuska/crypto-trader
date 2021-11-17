@@ -19,8 +19,8 @@ export default class Table {
         return {
             symbol: parts[0],
             resolution: parts[1],
-            from: from.getFullYear() + '-' + from.getMonth() + '-' + from.getDate(),
-            to: to.getFullYear() + '-' + to.getMonth() + '-' + to.getDate()
+            from: from.getFullYear() + '-' + (from.getMonth() + 1) + '-' + from.getDate(),
+            to: to.getFullYear() + '-' + (to.getMonth() + 1) + '-' + to.getDate()
         }
     }
 }
