@@ -1,7 +1,7 @@
 .grid {
     display: grid;
     height: 50vh;
-    width: 50vw;
+    width: 70vw;
     grid-template-columns: 1fr 1fr;
     margin: auto;
 }
@@ -13,12 +13,13 @@
 .leftSide {
     display: inline-grid;
     grid-row: 2 / 4;
-    border-right: #888 thick solid;
+    border-right: var(--color4) thick solid;
 }
 
 .leftSide > a {
-    background-color: var(--navbarBg);
-    border: black thin solid;
+    background-color: var(--color2);
+    color: var(--color4);
+    border: var(--color5) thin solid;
     border-radius: 1em;
     padding: 1em;
     display: flex;
@@ -26,6 +27,11 @@
     margin: auto;
     justify-content: center;
     align-items: center;
+}
+
+.leftSide > a:hover {
+    color: var(--color2);
+    background-color: var(--color4);
 }
 
 .leftSide > .backtest {
@@ -38,14 +44,17 @@
 
 .rightSide {
     grid-row: 1 / 5;
-    padding: 1.5em 1em;
+    padding-left: 4em;
+    padding-top: 2em;
 }
 
 .rightSide > p:first-of-type {
     font-weight: bold;
     font-size: 3em;
+    margin-bottom: 0.5em;
 }
 
 .rightSide li {
     font-size: 1.00em;
+    margin-bottom: 0.25em;
 }

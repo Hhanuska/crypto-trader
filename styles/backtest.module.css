@@ -2,12 +2,36 @@
     width: 100px;
 }
 
+.table {
+    border-collapse: collapse;
+}
+
+.table tr:nth-of-type(even) {
+    background-color: white;
+}
+
+.table tr:nth-of-type(odd) {
+    background-color: var(--color1)
+}
+
 .table td {
     text-align: center;
 }
 
 .table {
-    margin: 2em auto;
+    margin: 2em auto 0;
+    border: var(--color4) solid thick;
+}
+
+.deleteButton {
+    background-color: red;
+    color: white;
+}
+
+.scrollable {
+    height: 40vh;
+    overflow-y: auto;
+    border-bottom: var(--color5) thin solid;
 }
 
 .chart {

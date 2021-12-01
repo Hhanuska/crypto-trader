@@ -2,7 +2,7 @@
     list-style-type: none;
     margin: 0;
     padding: 0;
-    background-color: var(--navbarBg);
+    background-color: var(--color2);
     overflow: hidden;
 }
 
@@ -17,15 +17,15 @@
 }
 
 .navbar > ul > li > a:not(.active) {
-    color: var(--navbarHg);
+    color: var(--color4);
 }
 
 .navbar > ul > li:hover > a {
-    background-color: var(--navbarHg);
-    color: var(--navbarBg);
+    background-color: var(--color4);
+    color: var(--color2);
 }
 
 .active {
-    background-color: var(--navbarHg);
-    color: var(--navbarBg);
+    background-color: var(--color4);
+    color: var(--color2);
 }

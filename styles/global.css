@@ -1,6 +1,10 @@
 :root {
-	--navbarBg: #fae5df;
-	--navbarHg: #303179;
+	/* Color palette */
+	--color1: #fae5df;
+	--color2: #f5cac2;
+	--color3: #ed7966;
+	--color4: #303179;
+	--color5: #141850;
 }
 
 html, body {

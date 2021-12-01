@@ -59,35 +59,37 @@ const BacktestPage: NextPage = ({ tables }: InferGetServerSidePropsType<typeof g
     return (
         <div>
             <NavBar />
-            <table className={styles.table}>
-                <tr>
-                    <th>Symbol</th>
-                    <th>Resolution</th>
-                    <th>Start Date</th>
-                    <th>End Date</th>
-                    <th>Action</th>
-                    <th>Chart</th>
-                </tr>
-                {tables.map((name: string) => {
-                    const parsed = Table.parseTableName(name);
-                    
-                    return (
-                        <tr id={name} key={name}>
-                            <td>{parsed.symbol}</td>
-                            <td>{parsed.resolution}</td>
-                            <td>{parsed.from}</td>
-                            <td>{parsed.to}</td>
-                            <td>
-                                <button value={name} onClick={dropTable}>🗑 Delete</button>
-                            </td>
-                            <td>
-                                <button value={name} onClick={updateChart}>📈</button>
-                            </td>
-                        </tr>
-                    );
-                })
-            }
-            </table>
+            <div className={styles.scrollable}>
+                <table className={styles.table}>
+                    <tr>
+                        <th>Symbol</th>
+                        <th>Resolution</th>
+                        <th>Start Date</th>
+                        <th>End Date</th>
+                        <th>Action</th>
+                        <th>Chart</th>
+                    </tr>
+                    {tables.map((name: string) => {
+                        const parsed = Table.parseTableName(name);
+                
+                        return (
+                            <tr id={name} key={name}>
+                                <td>{parsed.symbol}</td>
+                                <td>{parsed.resolution}</td>
+                                <td>{parsed.from}</td>
+                                <td>{parsed.to}</td>
+                                <td>
+                                    <button value={name} onClick={dropTable} className={styles.deleteButton}>🗑 Delete</button>
+                                </td>
+                                <td>
+                                    <button value={name} onClick={updateChart} className={styles.chartButton}>📈</button>
+                                </td>
+                            </tr>
+                        );
+                    })
+                }
+                </table>
+            </div>
             <div className={styles.chart}>
                 <CandlestickChart
                     data={candlestickData.data}
