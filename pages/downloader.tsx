@@ -80,7 +80,7 @@ const DownloadPage: NextPage = ({ resolutions }: InferGetStaticPropsType<typeof 
                         {
                             Object.keys(resolutions).map((label: string) => {
                                 return (
-                                    <optgroup label={label}>
+                                    <optgroup key={label} label={label}>
                                         {resolutions[label].map((EResolution: string) => {
                                             return (
                                                 <option key={EResolution} value={EResolution} selected={EResolution === '1d'}>{EResolution}</option>
