@@ -1,0 +1,51 @@
+.grid {
+    display: grid;
+    height: 50vh;
+    width: 50vw;
+    grid-template-columns: 1fr 1fr;
+    margin: auto;
+}
+
+.gridItem {
+
+}
+
+.leftSide {
+    display: inline-grid;
+    grid-row: 2 / 4;
+    border-right: #888 thick solid;
+}
+
+.leftSide > a {
+    background-color: var(--navbarBg);
+    border: black thin solid;
+    border-radius: 1em;
+    padding: 1em;
+    display: flex;
+    width: 10em;
+    margin: auto;
+    justify-content: center;
+    align-items: center;
+}
+
+.leftSide > .backtest {
+    margin-top: 1em;
+}
+
+.leftSide > .downloader {
+    margin-bottom: 1em;
+}
+
+.rightSide {
+    grid-row: 1 / 5;
+    padding: 1.5em 1em;
+}
+
+.rightSide > p:first-of-type {
+    font-weight: bold;
+    font-size: 3em;
+}
+
+.rightSide li {
+    font-size: 1.00em;
+}
