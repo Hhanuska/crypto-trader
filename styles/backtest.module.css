@@ -1,4 +1,4 @@
-.table th {
+.table th, .table td {
     width: 100px;
 }
 
@@ -19,8 +19,15 @@
 }
 
 .table {
+    display: block;
     margin: 2em auto 0;
     border: var(--color4) solid thick;
+    width: fit-content;
+
+    /* Scrollable */
+    height: fit-content;
+    max-height: 35vh;
+    overflow: auto;
 }
 
 .deleteButton {
@@ -28,14 +35,10 @@
     color: white;
 }
 
-.scrollable {
-    height: 40vh;
-    overflow-y: auto;
-    border-bottom: var(--color5) thin solid;
-}
-
 .chart {
+    border-top: var(--color5) thin solid;
     width: 75%;
     display: block;
-    margin: 3em auto;
+    margin: 2em auto;
+    padding-top: 2em;
 }
