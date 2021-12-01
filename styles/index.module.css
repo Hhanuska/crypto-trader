@@ -6,10 +6,6 @@
     margin: auto;
 }
 
-.gridItem {
-
-}
-
 .leftSide {
     display: inline-grid;
     grid-row: 2 / 4;
