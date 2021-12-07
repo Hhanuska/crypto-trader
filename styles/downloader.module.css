@@ -1,15 +1,21 @@
 .downloader {
     margin: 5em auto;
-    display: block;
     width: fit-content;
+    border: thick solid var(--color4);
+    background-color: var(--color1);
+    padding: 3em;
 }
 
 .form input {
     display: block;
     padding: 1em;
-    border: thin gray solid;
+    border: thin var(--color3) solid;
     border-radius: 2em;
     margin: 1em;
+}
+
+.form select {
+    border: thin var(--color3) solid;
 }
 
 .form input:last-of-type {

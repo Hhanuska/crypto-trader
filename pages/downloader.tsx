@@ -61,7 +61,7 @@ const DownloadPage: NextPage = ({ resolutions }: InferGetStaticPropsType<typeof 
     }
 
     return (
-        <div>
+        <div className={styles.container}>
             <Head>
                 <title>Downloader</title>
                 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -75,7 +75,7 @@ const DownloadPage: NextPage = ({ resolutions }: InferGetStaticPropsType<typeof 
                     <input type="date" id="from" required />
                     <label htmlFor="to">To</label>
                     <input type="date" id="to" required />
-                    <label htmlFor="resolution">Resolution</label>
+                    <label htmlFor="resolution">Resolution </label>
                     <select name="resolution" id="resolution">
                         {
                             Object.keys(resolutions).map((label: string) => {
