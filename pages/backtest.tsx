@@ -41,6 +41,7 @@ const dropTable = async (event: BaseSyntheticEvent) => {
 
 const BacktestPage: NextPage = ({ tables, strategies }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
     const [candlestickData, setCandlestickData] = useState({ data: [], title: '' });
+    const [selected, setSelected] = useState(null);
 
     const updateChart = async (event: BaseSyntheticEvent) => {
         const res = await fetch('/api/getCandles?' + new URLSearchParams({ table: event.target.value }));
@@ -56,6 +57,14 @@ const BacktestPage: NextPage = ({ tables, strategies }: InferGetServerSidePropsT
                 }),
                 title: event.target.value.split('_')[0]
             })
+        }
+    }
+
+    const select = (event: BaseSyntheticEvent) => {
+        if (selected === event.target.value) {
+            setSelected(null);
+        } else {
+            setSelected(event.target.value);
         }
     }
 
@@ -80,11 +89,12 @@ const BacktestPage: NextPage = ({ tables, strategies }: InferGetServerSidePropsT
                         <th>End Date</th>
                         <th>Action</th>
                         <th>Chart</th>
+                        <th>Select</th>
                     </tr>
                     {tables.map((name: string) => {
                         const parsed = Table.parseTableName(name);
                         return (
-                            <tr id={name} key={name}>
+                            <tr id={name} key={name} className={selected === name ? styles.selected : ''}>
                                 <td>{parsed.symbol}</td>
                                 <td>{parsed.resolution}</td>
                                 <td>{parsed.from}</td>
@@ -93,7 +103,10 @@ const BacktestPage: NextPage = ({ tables, strategies }: InferGetServerSidePropsT
                                     <button value={name} onClick={dropTable} className={styles.deleteButton}>🗑 Delete</button>
                                 </td>
                                 <td>
-                                    <button value={name} onClick={updateChart} className={styles.chartButton}>📈</button>
+                                    <button value={name} onClick={updateChart}>📈</button>
+                                </td>
+                                <td>
+                                    <button value={name} onClick={select}>Select</button>
                                 </td>
                             </tr>
                         );
