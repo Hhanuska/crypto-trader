@@ -7,7 +7,6 @@ import CandlestickChart from '../components/candlestickChart';
 import Database from '../app/database/Database';
 import Table from '../app/database/Table';
 import { Candlestick } from '../app/binance/data/candlestick';
-import runStrategy from '../app/strategies/_runStrategy';
 
 import styles from '../styles/backtest.module.css';
 import { getFileNames, removeStartsWithUnderscore, getStrategies } from '../app/resources/files';
@@ -62,7 +61,11 @@ const BacktestPage: NextPage = ({ tables, strategies }: InferGetServerSidePropsT
 
     const runStrat = async (event: BaseSyntheticEvent) => {
         const obj = JSON.parse(event.target.value)
-        runStrategy(obj);
+
+        const response = await fetch('api/strategies/run', {
+            method: 'POST',
+            body: JSON.stringify(obj)
+        });
     }
 
     return (
