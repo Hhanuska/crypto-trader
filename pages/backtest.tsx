@@ -7,15 +7,19 @@ import CandlestickChart from '../components/candlestickChart';
 import Database from '../app/database/Database';
 import Table from '../app/database/Table';
 import { Candlestick } from '../app/binance/data/candlestick';
+import runStrategy from '../app/strategies/_runStrategy';
 
 import styles from '../styles/backtest.module.css';
+import { getFileNames, removeStartsWithUnderscore, getStrategies } from '../app/resources/files';
 
 export const getServerSideProps: GetServerSideProps = async (context: GetServerSidePropsContext) => {
     const tables = (await Database.instance.getTables()).map((t) => t.name);
+    const strategies = await getStrategies();
 
     return {
         props: {
-            tables: tables
+            tables: tables,
+            strategies: strategies
         }
     }
 }
@@ -36,7 +40,7 @@ const dropTable = async (event: BaseSyntheticEvent) => {
     element?.parentNode?.removeChild(element);
 }
 
-const BacktestPage: NextPage = ({ tables }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
+const BacktestPage: NextPage = ({ tables, strategies }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
     const [candlestickData, setCandlestickData] = useState({ data: [], title: '' });
 
     const updateChart = async (event: BaseSyntheticEvent) => {
@@ -56,38 +60,60 @@ const BacktestPage: NextPage = ({ tables }: InferGetServerSidePropsType<typeof g
         }
     }
 
+    const runStrat = async (event: BaseSyntheticEvent) => {
+        const obj = JSON.parse(event.target.value)
+        runStrategy(obj);
+    }
+
     return (
         <div>
             <NavBar />
-            <table className={styles.table}>
-                <tr>
-                    <th>Symbol</th>
-                    <th>Resolution</th>
-                    <th>Start Date</th>
-                    <th>End Date</th>
-                    <th>Action</th>
-                    <th>Chart</th>
-                </tr>
-                {tables.map((name: string) => {
-                    const parsed = Table.parseTableName(name);
-
-                    return (
-                        <tr id={name} key={name}>
-                            <td>{parsed.symbol}</td>
-                            <td>{parsed.resolution}</td>
-                            <td>{parsed.from}</td>
-                            <td>{parsed.to}</td>
-                            <td>
-                                <button value={name} onClick={dropTable} className={styles.deleteButton}>🗑 Delete</button>
-                            </td>
-                            <td>
-                                <button value={name} onClick={updateChart} className={styles.chartButton}>📈</button>
-                            </td>
-                        </tr>
-                    );
-                })
-                }
-            </table>
+            <div className={styles.selector}>
+                <table className={styles.table}>
+                    <tr>
+                        <th>Symbol</th>
+                        <th>Resolution</th>
+                        <th>Start Date</th>
+                        <th>End Date</th>
+                        <th>Action</th>
+                        <th>Chart</th>
+                    </tr>
+                    {tables.map((name: string) => {
+                        const parsed = Table.parseTableName(name);
+                        return (
+                            <tr id={name} key={name}>
+                                <td>{parsed.symbol}</td>
+                                <td>{parsed.resolution}</td>
+                                <td>{parsed.from}</td>
+                                <td>{parsed.to}</td>
+                                <td>
+                                    <button value={name} onClick={dropTable} className={styles.deleteButton}>🗑 Delete</button>
+                                </td>
+                                <td>
+                                    <button value={name} onClick={updateChart} className={styles.chartButton}>📈</button>
+                                </td>
+                            </tr>
+                        );
+                    })
+                    }
+                </table>
+                <table className={styles.table}>
+                    <tr>
+                        <th>Title</th>
+                        <th>Action</th>
+                    </tr>
+                    {strategies.map((strat: any) => {
+                        return (
+                            <tr id={strat.title} key={strat.title}>
+                                <td>{strat.title}</td>
+                                <td>
+                                    <button value={JSON.stringify(strat)} onClick={runStrat}>Run</button>
+                                </td>
+                            </tr>
+                        )
+                    })}
+                </table>
+            </div>
             <div className={styles.chart}>
                 <CandlestickChart
                     data={candlestickData.data}
