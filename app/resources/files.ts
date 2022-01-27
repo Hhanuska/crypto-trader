@@ -23,8 +23,6 @@ export function removeStartsWithUnderscore(fileNames: Array<string>) {
 export async function getStrategies(): Promise<Strategy[]> {
     const fileNames = removeStartsWithUnderscore(getFileNames('app/strategies'));
 
-    console.log(fileNames);
-
     const strategies: Strategy[] = [];
 
     for (let i = 0; i < fileNames.length; i++) {
