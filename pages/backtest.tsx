@@ -10,6 +10,7 @@ import { Candlestick } from '../app/binance/data/candlestick';
 
 import styles from '../styles/backtest.module.css';
 import { getFileNames, removeStartsWithUnderscore, getStrategies } from '../app/resources/files';
+import { Strategy } from '../app/strategies/_strategyTemplate';
 
 export const getServerSideProps: GetServerSideProps = async (context: GetServerSidePropsContext) => {
     const tables = (await Database.instance.getTables()).map((t) => t.name);
@@ -69,7 +70,7 @@ const BacktestPage: NextPage = ({ tables, strategies }: InferGetServerSidePropsT
     }
 
     const runStrat = async (event: BaseSyntheticEvent) => {
-        const obj = JSON.parse(event.target.value)
+        const obj = JSON.parse(event.target.value) as Strategy;
 
         if (!selected) {
             return;
@@ -125,10 +126,10 @@ const BacktestPage: NextPage = ({ tables, strategies }: InferGetServerSidePropsT
                         <th>Title</th>
                         <th>Action</th>
                     </tr>
-                    {strategies.map((strat: any) => {
+                    {strategies.map((strat: Strategy) => {
                         return (
                             <tr id={strat.title} key={strat.title}>
-                                <td>{strat.title}</td>
+                                <td title={strat.description}>{strat.title}</td>
                                 <td>
                                     <button value={JSON.stringify(strat)} onClick={runStrat}>Run</button>
                                 </td>
