@@ -1,3 +1,3 @@
-export default function strat() {
-    console.log('Working.')
+export default function strat(dataset: string) {
+    console.log(`Working on ${dataset}`);
 }

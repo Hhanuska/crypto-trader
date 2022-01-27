@@ -71,9 +71,16 @@ const BacktestPage: NextPage = ({ tables, strategies }: InferGetServerSidePropsT
     const runStrat = async (event: BaseSyntheticEvent) => {
         const obj = JSON.parse(event.target.value)
 
+        if (!selected) {
+            return;
+        }
+
         const response = await fetch('api/strategies/run', {
             method: 'POST',
-            body: JSON.stringify(obj)
+            body: JSON.stringify({
+                ...obj,
+                data: selected
+            })
         });
     }
 
