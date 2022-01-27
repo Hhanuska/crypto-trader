@@ -18,6 +18,10 @@
     text-align: center;
 }
 
+.table th {
+    border-bottom: var(--color4) solid thin;
+}
+
 .table {
     display: block;
     margin: 2em auto 0;
