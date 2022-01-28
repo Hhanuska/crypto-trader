@@ -12,3 +12,5 @@ export interface Strategy extends Meta {
 export interface RunStrategy extends Strategy {
     data: string;   // name of dataset
 }
+
+export type OnCandleResult = 'long' | 'short' | 'close' | null;

@@ -1,11 +1,17 @@
-import { Meta } from '../_strategyTemplate';
+import { Meta } from '../_helpers/_strategyTemplate';
+
+export interface Options {
+    emaShort: number;
+    emaLong: number;
+}
 
 const meta: Meta = {
     title: 'Strategy #1',
     description: 'Trading strategy utilizing x and y indicators',
     options: {
-        option1: '1',
-        option2: '2'
+        warmUp: 14,
+        ema1: 12,
+        ema2: 50
     },
     entry: 'strategy'
 }

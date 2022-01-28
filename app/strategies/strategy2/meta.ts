@@ -1,4 +1,4 @@
-import { Meta } from '../_strategyTemplate';
+import { Meta } from '../_helpers/_strategyTemplate';
 
 const meta: Meta = {
     title: 'Strategy #2',

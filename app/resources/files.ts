@@ -1,5 +1,5 @@
 import fs from 'fs';
-import { Meta, Strategy } from '../strategies/_strategyTemplate';
+import { Meta, Strategy } from '../strategies/_helpers/_strategyTemplate';
 
 export function getFileNames(path: string): Array<string> {
     if (!fs.existsSync(path)) {

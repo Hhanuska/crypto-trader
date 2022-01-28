@@ -134,4 +134,18 @@ export default class Database {
             });
         });
     }
+
+    public async getCandlesPaginated(tableName: string, limit: number, start: number = 0, orderBy: string = 'closeTime'): Promise<Array<any>> {
+        const statement = `SELECT * FROM ${tableName} WHERE closeTime > ${start} ORDER BY ${orderBy} LIMIT ${limit}`
+
+        return new Promise((resolve, reject) => {
+            this.db.all(statement, (err, rows) => {
+                if (err) {
+                    reject(err);
+                }
+
+                resolve(rows);
+            });
+        });
+    }
 }

@@ -10,7 +10,7 @@ import { Candlestick } from '../app/binance/data/candlestick';
 
 import styles from '../styles/backtest.module.css';
 import { getFileNames, removeStartsWithUnderscore, getStrategies } from '../app/resources/files';
-import { Strategy } from '../app/strategies/_strategyTemplate';
+import { Strategy } from '../app/strategies/_helpers/_strategyTemplate';
 
 export const getServerSideProps: GetServerSideProps = async (context: GetServerSidePropsContext) => {
     const tables = (await Database.instance.getTables()).map((t) => t.name);
