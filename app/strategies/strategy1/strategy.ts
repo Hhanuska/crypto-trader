@@ -1,7 +1,7 @@
-import { EmbedHTMLAttributes } from "react";
-import { Candlestick } from "../../binance/data/candlestick";
-import { OnCandleResult } from "../_helpers/_strategyTemplate";
-import { Options } from "./meta";
+import { Candlestick } from '../../binance/data/candlestick';
+import { Positions } from '../../simulation/Simulation';
+import { ActionType, OnCandleResult } from '../_helpers/_strategyTemplate';
+import { Options } from './meta';
 
 let options: Options = {
     emaShort: 12,
@@ -46,23 +46,39 @@ export function init(opts: Options) {
     storage.emaLong.length = options.emaLong;
 }
 
-export default function onCandle(candle: Candlestick): OnCandleResult {
+export default function onCandle(candle: Candlestick, availableBalance: number, openPositions: Positions): OnCandleResult[] {
     progressEma('emaShort', candle.close);
     progressEma('emaLong', candle.close);
 
+    const actions: OnCandleResult[] = [];
+
     if (!isEmaReady('emaLong')) {
-        return null;
+        return actions;
     }
 
     if (storage.emaShort.last <= storage.emaLong.last && storage.emaShort.current > storage.emaLong.current) {
-        return 'long';
+        // Close short positions
+        for (const id in openPositions) {
+            if (openPositions[id].getDirection() === 'short') {
+                actions.push({ action: 'close', id: id });
+            }
+        }
+
+        actions.push({ action: 'long', percent: 1 });
     }
 
     if (storage.emaShort.last >= storage.emaLong.last && storage.emaShort.current < storage.emaLong.current) {
-        return 'short';
+        // Close long positions
+        for (const id in openPositions) {
+            if (openPositions[id].getDirection() === 'long') {
+                actions.push({ action: 'close', id: id });
+            }
+        }
+
+        actions.push({ action: 'short', percent: 1 });
     }
 
-    return null;
+    return actions;
 }
 
 type EmaName = 'emaShort' | 'emaLong';
