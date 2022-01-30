@@ -63,9 +63,11 @@ export default class PositionHandler {
         if (r.action === 'close') {
             return r;
         } else {
+            const toUse = r.type === 'absolute' ? r.value : balance * r.value;
+
             return {
                 action: r.action,
-                value: r.percent * balance
+                value: toUse
             }
         }
     }

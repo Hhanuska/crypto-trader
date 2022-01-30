@@ -15,11 +15,12 @@ export interface RunStrategy extends Strategy {
 
 export type ActionType = OpenPosition | ClosePosition;
 
-export type OnCandleResult = ClosePosition | OpenPositionPercent;
+export type OnCandleResult = ClosePosition | OpenPositionType;
 
-interface OpenPositionPercent {
+interface OpenPositionType {
     action: 'long' | 'short';
-    percent: number;
+    type: 'percent' | 'absolute';
+    value: number;
 }
 
 interface OpenPosition {

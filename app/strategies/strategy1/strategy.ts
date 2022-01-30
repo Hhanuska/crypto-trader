@@ -64,7 +64,7 @@ export default function onCandle(candle: Candlestick, availableBalance: number, 
             }
         }
 
-        actions.push({ action: 'long', percent: 1 });
+        actions.push({ action: 'long', type: 'percent', value: 1 });
     }
 
     if (storage.emaShort.last >= storage.emaLong.last && storage.emaShort.current < storage.emaLong.current) {
@@ -75,7 +75,7 @@ export default function onCandle(candle: Candlestick, availableBalance: number, 
             }
         }
 
-        actions.push({ action: 'short', percent: 1 });
+        actions.push({ action: 'short', type: 'percent', value: 1 });
     }
 
     return actions;
