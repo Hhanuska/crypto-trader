@@ -166,16 +166,12 @@ const BacktestPage: NextPage = ({ tables, strategies }: InferGetServerSidePropsT
                 <table className={styles.table}>
                     <tr>
                         <th>Title</th>
-                        <th>Action</th>
                         <th>Select</th>
                     </tr>
                     {strategies.map((strat: Strategy) => {
                         return (
                             <tr id={strat.dir} key={strat.dir} className={selectedStrategy === strat.dir ? styles.selected : ''}>
                                 <td title={strat.description}>{strat.title}</td>
-                                <td>
-                                    <button value={strat.dir} onClick={runStrat}>Run</button>
-                                </td>
                                 <td>
                                     <button value={strat.dir} onClick={selectStrategy}>Select</button>
                                 </td>
