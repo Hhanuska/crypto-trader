@@ -4,11 +4,11 @@ import { BaseSyntheticEvent, useState } from 'react';
 import NavBar from '../components/navbar';
 import CandlestickChart from '../components/candlestickChart';
 
+import styles from '../styles/backtest.module.css';
+
 import Database from '../app/database/Database';
 import Table from '../app/database/Table';
 import { Candlestick } from '../app/binance/data/candlestick';
-
-import styles from '../styles/backtest.module.css';
 import { getStrategies } from '../app/resources/files';
 import { Strategy } from '../app/strategies/_helpers/_strategyTemplate';
 

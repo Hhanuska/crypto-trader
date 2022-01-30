@@ -1,12 +1,13 @@
 import type { GetStaticProps, GetStaticPropsContext, InferGetStaticPropsType, NextPage } from 'next';
 import Head from 'next/head';
 import { BaseSyntheticEvent, useState } from 'react';
+
 import NavBar from '../components/navbar';
+
+import styles from '../styles/downloader.module.css'
 
 import { timeout } from '../app/resources/utils';
 import EResolution from '../app/resources/EResolution';
-
-import styles from '../styles/downloader.module.css'
 
 export const getStaticProps: GetStaticProps = (context: GetStaticPropsContext) => {
     const resolutions = EResolution;
