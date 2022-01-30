@@ -1,5 +1,5 @@
-import { Candlestick } from "../../binance/data/candlestick";
-import { Positions } from "../../simulation/Simulation";
+import { Candlestick } from '../../binance/data/candlestick';
+import { Positions } from '../../simulation/Simulation';
 
 export interface Meta {
     title: string;
@@ -37,7 +37,20 @@ interface ClosePosition {
 }
 
 export abstract class AbstractStrategy {
-    public abstract init(options: Object): void;
+    /**
+     * Initialize strategy
+     * Gets called once at the start
+     * @param options 
+     */
+    public abstract init(options: any): void;
 
-    public abstract onCandle(candle: Candlestick, availableBalance: number, openPositions: Positions): OnCandleResult[];
+    /**
+     * Gets called on every candle
+     * Returns an action or an array of actions
+     * @param candle 
+     * @param availableBalance 
+     * @param openPositions 
+     * @returns action or array of actions
+     */
+    public abstract onCandle(candle: Candlestick, availableBalance: number, openPositions: Positions): OnCandleResult | OnCandleResult[];
 }
