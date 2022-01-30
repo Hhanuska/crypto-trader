@@ -1,17 +1,7 @@
 import { Candlestick } from '../../binance/data/candlestick';
 import { Positions } from '../../simulation/Simulation';
-import { AbstractStrategy, ActionType, OnCandleResult, Strategy } from '../_helpers/_strategyTemplate';
+import { AbstractStrategy, OnCandleResult } from '../_helpers/_strategyTemplate';
 import { Options } from './meta';
-
-let options: Options = {
-    smaShort: 12,
-    smaLong: 50
-};
-
-interface Storage {
-    smaShort: Sma;
-    smaLong: Sma;
-}
 
 interface Sma {
     values: number[];
@@ -22,23 +12,6 @@ interface Sma {
 }
 
 type SmaName = 'smaShort' | 'smaLong';
-
-const storage: Storage = {
-    smaShort: {
-        values: [],
-        sum: 0,
-        length: 0,
-        current: 0,
-        last: 0
-    },
-    smaLong: {
-        values: [],
-        sum: 0,
-        length: 0,
-        current: 0,
-        last: 0
-    }
-}
 
 export default class SmaCrossover implements AbstractStrategy {
 
