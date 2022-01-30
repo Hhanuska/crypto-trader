@@ -44,7 +44,8 @@ const BacktestPage: NextPage = ({ tables, strategies }: InferGetServerSidePropsT
     const [candlestickData, setCandlestickData] = useState({ data: [], title: '' });
     const [selectedDataset, setSelectedDataset] = useState(null);
     const [selectedStrategy, setSelectedStrategy] = useState(null);
-    const [textAreaValue, setTextAreaValue] = useState('Select a strategy');
+    const textAreaDefault = 'Select a strategy'
+    const [textAreaValue, setTextAreaValue] = useState(textAreaDefault);
 
     const updateChart = async (event: BaseSyntheticEvent) => {
         const res = await fetch('/api/getCandles?' + new URLSearchParams({ table: event.target.value }));
@@ -74,6 +75,7 @@ const BacktestPage: NextPage = ({ tables, strategies }: InferGetServerSidePropsT
     const selectStrategy = (event: BaseSyntheticEvent) => {
         if (selectedStrategy === event.target.value) {
             setSelectedStrategy(null);
+            setTextAreaValue(textAreaDefault);
         } else {
             setSelectedStrategy(event.target.value);
             setOptionsInputValue(event.target.value);
