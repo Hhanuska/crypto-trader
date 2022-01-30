@@ -43,6 +43,8 @@ const dropTable = async (event: BaseSyntheticEvent) => {
 const BacktestPage: NextPage = ({ tables, strategies }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
     const [candlestickData, setCandlestickData] = useState({ data: [], title: '' });
     const [selectedDataset, setSelectedDataset] = useState(null);
+    const [selectedStrategy, setSelectedStrategy] = useState(null);
+    const [textAreaValue, setTextAreaValue] = useState('Select a strategy');
 
     const updateChart = async (event: BaseSyntheticEvent) => {
         const res = await fetch('/api/getCandles?' + new URLSearchParams({ table: event.target.value }));
@@ -69,20 +71,51 @@ const BacktestPage: NextPage = ({ tables, strategies }: InferGetServerSidePropsT
         }
     }
 
+    const selectStrategy = (event: BaseSyntheticEvent) => {
+        if (selectedStrategy === event.target.value) {
+            setSelectedStrategy(null);
+        } else {
+            setSelectedStrategy(event.target.value);
+            setOptionsInputValue(event.target.value);
+        }
+    }
+
+    const handleTextAreaChange = (event: BaseSyntheticEvent) => {
+        setTextAreaValue(event.target.value);
+    }
+
+    const setOptionsInputValue = (dir: string) => {
+        const strat = getStratFromDir(dir);
+
+        if (!strat) {
+            throw new Error('Invalid strategy');
+        }
+
+        setTextAreaValue(JSON.stringify(strat.options, null, 2));
+    }
+
     const getStratFromDir = (dir: string): Strategy | undefined => {
         return (strategies as Strategy[]).find((strat: Strategy) => strat.dir === dir);
     }
 
     const runStrat = async (event: BaseSyntheticEvent) => {
-        if (!selectedDataset) {
+        if (!selectedDataset || !selectedStrategy) {
             return;
         }
 
-        const obj = getStratFromDir(event.target.value);
+        // Use spread operator to make a new object instead of a reference
+        // This way the default options for the strategy will be unchanged
+        const obj = {...getStratFromDir(selectedStrategy)};
 
         if (!obj) {
             throw new Error('Invalid strategy');
-            return;
+        }
+
+        try {
+            const options = JSON.parse(textAreaValue);
+            obj.options = options;
+        } catch (err) {
+            console.log('Invalid options. Make sure it\'s valid JSON.');
         }
 
         const response = await fetch('api/strategies/run', {
@@ -134,18 +167,24 @@ const BacktestPage: NextPage = ({ tables, strategies }: InferGetServerSidePropsT
                     <tr>
                         <th>Title</th>
                         <th>Action</th>
+                        <th>Select</th>
                     </tr>
                     {strategies.map((strat: Strategy) => {
                         return (
-                            <tr id={strat.dir} key={strat.dir}>
+                            <tr id={strat.dir} key={strat.dir} className={selectedStrategy === strat.dir ? styles.selected : ''}>
                                 <td title={strat.description}>{strat.title}</td>
                                 <td>
                                     <button value={strat.dir} onClick={runStrat}>Run</button>
+                                </td>
+                                <td>
+                                    <button value={strat.dir} onClick={selectStrategy}>Select</button>
                                 </td>
                             </tr>
                         )
                     })}
                 </table>
+                <textarea value={textAreaValue} onChange={handleTextAreaChange} rows={12} cols={40} />
+                <button onClick={runStrat}>Run Backtest</button>
             </div>
             <div className={styles.chart}>
                 <CandlestickChart
