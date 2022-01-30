@@ -6,8 +6,8 @@ export interface Options {
 }
 
 const meta: Meta = {
-    title: 'EMA Crossover',
-    description: 'Trading strategy utilizing EMA crossovers',
+    title: 'SMA Crossover',
+    description: 'Trading strategy utilizing SMA crossovers',
     options: {
         warmUp: 14,
         emaShort: 12,
