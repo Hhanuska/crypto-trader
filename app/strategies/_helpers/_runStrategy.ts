@@ -1,7 +1,7 @@
 import { Candlestick } from '../../binance/data/candlestick';
 import DataScheduler from './DataScheduler';
 import PositionHandler from './PositionHandler';
-import { RunStrategy, ActionType, OnCandleResult } from './_strategyTemplate';
+import { RunStrategy, OnCandleResult } from './_strategyTemplate';
 
 export default async function runStrategy(strat: RunStrategy) {
     const func = await import(`/app/strategies/${strat.dir}/${strat.entry}`);

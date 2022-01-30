@@ -1,5 +1,5 @@
-import API from "./Api";
-import Market from "./Market";
+import API from './Api';
+import Market from './Market';
 
 /**
  * Class for interacting with the Binance API

@@ -1,4 +1,4 @@
-import axios, { Axios, AxiosInstance, AxiosRequestConfig } from 'axios';
+import axios, { AxiosInstance, AxiosRequestConfig } from 'axios';
 
 export default class API {
 

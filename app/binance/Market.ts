@@ -1,4 +1,4 @@
-import API from "./Api";
+import API from './Api';
 
 export interface MarketDataOptions {
     symbol: string;
