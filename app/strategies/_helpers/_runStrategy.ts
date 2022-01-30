@@ -20,7 +20,7 @@ export default async function runStrategy(strat: RunStrategy) {
 
             positionHandler.updateCurrentPrice(candle.close);
 
-            const actions = strategy.onCandle(candle, positionHandler.getBalance(), positionHandler.getOpenPositions()) as OnCandleResult[];
+            const actions = strategy.onCandle(candle, positionHandler.getBalance(), positionHandler.getOpenPositions());
 
             actions.forEach((action) => {
                 positionHandler.action(action);
