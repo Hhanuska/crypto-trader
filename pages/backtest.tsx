@@ -42,7 +42,7 @@ const dropTable = async (event: BaseSyntheticEvent) => {
 
 const BacktestPage: NextPage = ({ tables, strategies }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
     const [candlestickData, setCandlestickData] = useState({ data: [], title: '' });
-    const [selected, setSelected] = useState(null);
+    const [selectedDataset, setSelectedDataset] = useState(null);
 
     const updateChart = async (event: BaseSyntheticEvent) => {
         const res = await fetch('/api/getCandles?' + new URLSearchParams({ table: event.target.value }));
@@ -61,18 +61,27 @@ const BacktestPage: NextPage = ({ tables, strategies }: InferGetServerSidePropsT
         }
     }
 
-    const select = (event: BaseSyntheticEvent) => {
-        if (selected === event.target.value) {
-            setSelected(null);
+    const selectDataset = (event: BaseSyntheticEvent) => {
+        if (selectedDataset === event.target.value) {
+            setSelectedDataset(null);
         } else {
-            setSelected(event.target.value);
+            setSelectedDataset(event.target.value);
         }
     }
 
-    const runStrat = async (event: BaseSyntheticEvent) => {
-        const obj = JSON.parse(event.target.value) as Strategy;
+    const getStratFromDir = (dir: string): Strategy | undefined => {
+        return (strategies as Strategy[]).find((strat: Strategy) => strat.dir === dir);
+    }
 
-        if (!selected) {
+    const runStrat = async (event: BaseSyntheticEvent) => {
+        if (!selectedDataset) {
+            return;
+        }
+
+        const obj = getStratFromDir(event.target.value);
+
+        if (!obj) {
+            throw new Error('Invalid strategy');
             return;
         }
 
@@ -80,7 +89,7 @@ const BacktestPage: NextPage = ({ tables, strategies }: InferGetServerSidePropsT
             method: 'POST',
             body: JSON.stringify({
                 ...obj,
-                data: selected
+                data: selectedDataset
             })
         });
     }
@@ -102,7 +111,7 @@ const BacktestPage: NextPage = ({ tables, strategies }: InferGetServerSidePropsT
                     {tables.map((name: string) => {
                         const parsed = Table.parseTableName(name);
                         return (
-                            <tr id={name} key={name} className={selected === name ? styles.selected : ''}>
+                            <tr id={name} key={name} className={selectedDataset === name ? styles.selected : ''}>
                                 <td>{parsed.symbol}</td>
                                 <td>{parsed.resolution}</td>
                                 <td>{parsed.from}</td>
@@ -114,7 +123,7 @@ const BacktestPage: NextPage = ({ tables, strategies }: InferGetServerSidePropsT
                                     <button value={name} onClick={updateChart}>📈</button>
                                 </td>
                                 <td>
-                                    <button value={name} onClick={select}>Select</button>
+                                    <button value={name} onClick={selectDataset}>Select</button>
                                 </td>
                             </tr>
                         );
@@ -128,10 +137,10 @@ const BacktestPage: NextPage = ({ tables, strategies }: InferGetServerSidePropsT
                     </tr>
                     {strategies.map((strat: Strategy) => {
                         return (
-                            <tr id={strat.title} key={strat.title}>
+                            <tr id={strat.dir} key={strat.dir}>
                                 <td title={strat.description}>{strat.title}</td>
                                 <td>
-                                    <button value={JSON.stringify(strat)} onClick={runStrat}>Run</button>
+                                    <button value={strat.dir} onClick={runStrat}>Run</button>
                                 </td>
                             </tr>
                         )
