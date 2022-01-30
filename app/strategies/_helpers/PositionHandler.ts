@@ -23,9 +23,9 @@ export default class PositionHandler {
         return this.mode;
     }
 
-    public getBalance() {
+    public getBalance(): number {
         if (this.mode === 'backtest') {
-            return this.simulation?.getBalance();
+            return (this.simulation as Simulation).getBalance();
         } else {
             // Live Trading (TODO)
             return 0;
@@ -34,7 +34,7 @@ export default class PositionHandler {
 
     public getOpenPositions() {
         if (this.mode === 'backtest') {
-            return this.simulation?.getOpenPositions();
+            return (this.simulation as Simulation).getOpenPositions();
         } else {
             // Live Trading (TODO)
             return {};

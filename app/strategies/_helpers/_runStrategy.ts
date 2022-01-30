@@ -1,16 +1,15 @@
 import { Candlestick } from '../../binance/data/candlestick';
 import DataScheduler from './DataScheduler';
 import PositionHandler from './PositionHandler';
-import { RunStrategy, OnCandleResult } from './_strategyTemplate';
+import { RunStrategy, OnCandleResult, AbstractStrategy } from './_strategyTemplate';
 
 export default async function runStrategy(strat: RunStrategy) {
-    const func = await import(`/app/strategies/${strat.dir}/${strat.entry}`);
+    const imp = await import(`/app/strategies/${strat.dir}/${strat.entry}`);
+    const strategy = new imp.default() as AbstractStrategy;
     const scheduler = new DataScheduler(strat.data);
     const positionHandler = new PositionHandler('backtest');
 
-    if (func.init) {
-        func.init(strat.options);
-    }
+    strategy.init(strat.options);
 
     while (!scheduler.isFinished()) {
         const candles = await scheduler.getNext();
@@ -21,7 +20,7 @@ export default async function runStrategy(strat: RunStrategy) {
 
             positionHandler.updateCurrentPrice(candle.close);
 
-            const actions = func.default(candle, positionHandler.getBalance(), positionHandler.getOpenPositions()) as OnCandleResult[];
+            const actions = strategy.onCandle(candle, positionHandler.getBalance(), positionHandler.getOpenPositions()) as OnCandleResult[];
 
             actions.forEach((action) => {
                 positionHandler.action(action);

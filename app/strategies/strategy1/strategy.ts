@@ -1,19 +1,19 @@
 import { Candlestick } from '../../binance/data/candlestick';
 import { Positions } from '../../simulation/Simulation';
-import { ActionType, OnCandleResult } from '../_helpers/_strategyTemplate';
+import { AbstractStrategy, ActionType, OnCandleResult, Strategy } from '../_helpers/_strategyTemplate';
 import { Options } from './meta';
 
 let options: Options = {
-    emaShort: 12,
-    emaLong: 50
+    smaShort: 12,
+    smaLong: 50
 };
 
 interface Storage {
-    emaShort: Ema;
-    emaLong: Ema;
+    smaShort: Sma;
+    smaLong: Sma;
 }
 
-interface Ema {
+interface Sma {
     values: number[];
     sum: number;
     length: number;
@@ -21,15 +21,17 @@ interface Ema {
     last: number;
 }
 
+type SmaName = 'smaShort' | 'smaLong';
+
 const storage: Storage = {
-    emaShort: {
+    smaShort: {
         values: [],
         sum: 0,
         length: 0,
         current: 0,
         last: 0
     },
-    emaLong: {
+    smaLong: {
         values: [],
         sum: 0,
         length: 0,
@@ -38,66 +40,87 @@ const storage: Storage = {
     }
 }
 
-export function init(opts: Options) {
-    options = { ...options, ...opts };
-    console.log(options);
+export default class SmaCrossover implements AbstractStrategy {
 
-    storage.emaShort.length = options.emaShort;
-    storage.emaLong.length = options.emaLong;
-}
+    private options: Options = {
+        smaShort: 12,
+        smaLong: 50
+    };
 
-export default function onCandle(candle: Candlestick, availableBalance: number, openPositions: Positions): OnCandleResult[] {
-    progressEma('emaShort', candle.close);
-    progressEma('emaLong', candle.close);
+    private smaShort: Sma = {
+        values: [],
+        sum: 0,
+        length: 0,
+        current: 0,
+        last: 0
+    }
 
-    const actions: OnCandleResult[] = [];
+    private smaLong: Sma = {
+        values: [],
+        sum: 0,
+        length: 0,
+        current: 0,
+        last: 0
+    }
 
-    if (!isEmaReady('emaLong')) {
+    public init(options: Options): void {
+        this.options = { ...this.options, ...options }
+
+        this.smaShort.length = options.smaShort;
+        this.smaLong.length = options.smaLong;
+    }
+
+    public onCandle(candle: Candlestick, availableBalance: number, openPositions: Positions): OnCandleResult[] {
+        this.progressSma('smaShort', candle.close);
+        this.progressSma('smaLong', candle.close);
+
+        const actions: OnCandleResult[] = [];
+
+        if (!this.isSmaReady('smaLong')) {
+            return actions;
+        }
+
+        if (this.smaShort.last <= this.smaLong.last && this.smaShort.current > this.smaLong.current) {
+            // Close short positions
+            for (const id in openPositions) {
+                if (openPositions[id].getDirection() === 'short') {
+                    actions.push({ action: 'close', id: id });
+                }
+            }
+
+            actions.push({ action: 'long', type: 'percent', value: 1 });
+        }
+
+        if (this.smaShort.last >= this.smaLong.last && this.smaShort.current < this.smaLong.current) {
+            // Close long positions
+            for (const id in openPositions) {
+                if (openPositions[id].getDirection() === 'long') {
+                    actions.push({ action: 'close', id: id });
+                }
+            }
+
+            actions.push({ action: 'short', type: 'percent', value: 1 });
+        }
+
         return actions;
     }
 
-    if (storage.emaShort.last <= storage.emaLong.last && storage.emaShort.current > storage.emaLong.current) {
-        // Close short positions
-        for (const id in openPositions) {
-            if (openPositions[id].getDirection() === 'short') {
-                actions.push({ action: 'close', id: id });
-            }
+    private progressSma(sma: SmaName, value: number) {
+        this[sma].sum += value;
+        this[sma].values.push(value);
+
+        if (this.smaSubtract(sma)) {
+            this[sma].last = this[sma].current;
+            this[sma].sum -= this[sma].values.shift() as number;
+            this[sma].current = this[sma].sum / this[sma].length;
         }
-
-        actions.push({ action: 'long', type: 'percent', value: 1 });
     }
 
-    if (storage.emaShort.last >= storage.emaLong.last && storage.emaShort.current < storage.emaLong.current) {
-        // Close long positions
-        for (const id in openPositions) {
-            if (openPositions[id].getDirection() === 'long') {
-                actions.push({ action: 'close', id: id });
-            }
-        }
-
-        actions.push({ action: 'short', type: 'percent', value: 1 });
+    private smaSubtract(sma: SmaName): boolean {
+        return this[sma].values.length > this[sma].length;
     }
 
-    return actions;
-}
-
-type EmaName = 'emaShort' | 'emaLong';
-
-function progressEma(ema: EmaName, value: number) {
-    storage[ema].sum += value;
-    storage[ema].values.push(value);
-
-    if (emaSubtract(ema)) {
-        storage[ema].last = storage[ema].current;
-        storage[ema].sum -= storage[ema].values.shift() as number;
-        storage[ema].current = storage[ema].sum / storage[ema].length;
+    private isSmaReady(sma: SmaName): boolean {
+        return this[sma].values.length === this[sma].length;
     }
-}
-
-function emaSubtract(ema: EmaName) {
-    return storage[ema].values.length > storage[ema].length;
-}
-
-function isEmaReady(ema: EmaName) {
-    return storage[ema].values.length === storage[ema].length;
 }

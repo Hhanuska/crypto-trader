@@ -1,3 +1,6 @@
+import { Candlestick } from "../../binance/data/candlestick";
+import { Positions } from "../../simulation/Simulation";
+
 export interface Meta {
     title: string;
     description: string;
@@ -33,6 +36,8 @@ interface ClosePosition {
     id: string;
 }
 
-interface NullPosition {
-    action: null;
+export abstract class AbstractStrategy {
+    public abstract init(options: Object): void;
+
+    public abstract onCandle(candle: Candlestick, availableBalance: number, openPositions: Positions): OnCandleResult[];
 }
