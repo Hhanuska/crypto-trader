@@ -3,11 +3,15 @@ import DataScheduler from './DataScheduler';
 import PositionHandler from './PositionHandler';
 import { RunStrategy, AbstractStrategy } from './_strategyTemplate';
 
-export default async function runStrategy(strat: RunStrategy) {
+export default async function runStrategy(strat: RunStrategy, startBalance?: number) {
     const imp = await import(`/app/strategies/${strat.dir}/${strat.entry}`);
+
     const strategy = new imp.default() as AbstractStrategy;
+
     const scheduler = new DataScheduler(strat.data);
-    const positionHandler = new PositionHandler('backtest');
+
+    startBalance = startBalance ? startBalance : 1000;
+    const positionHandler = new PositionHandler('backtest', startBalance);
 
     strategy.init(strat.options);
 
@@ -29,8 +33,24 @@ export default async function runStrategy(strat: RunStrategy) {
         }
     }
 
-    positionHandler.closeAllPositions();
+    // positionHandler.closeAllPositions();
 
-    console.log(positionHandler.getBalance());
-    console.log(positionHandler.getHistory());
+    let unrealized = 0;
+    for (const id in positionHandler.getOpenPositions()) {
+        unrealized += positionHandler.checkProfitIfClosed(id);
+    }
+
+    console.log(`
+        Backtest started with $${startBalance}.
+        Finished with $${positionHandler.getBalance()}
+        Unrealized:
+            ${Object.keys(positionHandler.getOpenPositions()).length} positions(s) still open.
+            If closed: $${unrealized}
+    `);
+
+    return {
+        balance: positionHandler.getBalance(),
+        positions: positionHandler.getOpenPositions(),
+        history: positionHandler.getHistory()
+    }
 }

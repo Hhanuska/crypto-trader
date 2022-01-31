@@ -57,6 +57,15 @@ export default class PositionHandler {
         }
     }
 
+    public checkProfitIfClosed(id: string): number {
+        if (this.mode === 'backtest') {
+            return (this.simulation as Simulation).checkProfitIfClosed(id, this.currentPrice);
+        } else {
+            // Live Trading (TODO)
+            return 0;
+        }
+    }
+
     private onCandleResultToAction(r: OnCandleResult): ActionType {
         const balance = this.mode === 'backtest' ? (this.simulation as Simulation).getBalance() : 0;
 

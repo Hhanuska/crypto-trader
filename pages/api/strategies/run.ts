@@ -8,7 +8,7 @@ export default async function handler(
 ) {
     const strategy = JSON.parse(request.body) as RunStrategy;
 
-    runStrategy(strategy)
+    const res = await runStrategy(strategy)
 
-    response.status(200).json({ success: true });
+    response.status(200).json({ success: true, ...res });
 }

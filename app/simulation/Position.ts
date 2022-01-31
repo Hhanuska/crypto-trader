@@ -44,6 +44,18 @@ export default class Position {
         return close;
     }
 
+    public checkProfitIfClosed(price: number): number {
+        let close = null;
+
+        if (this.direction === 'long') {
+            close = this.closeLong(price);
+        } else {
+            close = this.closeShort(price);
+        }
+
+        return close;
+    }
+
     private closeLong(price: number): number {
         return this.openValue * (price / this.openPrice);
     }

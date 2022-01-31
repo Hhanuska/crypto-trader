@@ -60,6 +60,14 @@ export default class Simulation {
         delete this.positions[id];
     }
 
+    public checkProfitIfClosed(id: string, price: number): number {
+        if (!this.positions[id]) {
+            throw new Error('This position doesn\'t exist: ' + id);
+        }
+
+        return this.positions[id].checkProfitIfClosed(price);
+    }
+
     private createId(position: Position) {
         let counter = 0;
 
